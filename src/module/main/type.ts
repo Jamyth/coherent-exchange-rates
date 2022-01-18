@@ -1,3 +1,13 @@
-export type Path = never;
+import type {
+    SearchBTCExchangeRateAJAXResponse,
+    SearchBTCExchangeRateHistoryAJAXRequest,
+    SearchBTCExchangeRateHistoryAJAXResponse,
+} from 'type/api';
 
-export interface State {}
+export type Path = '/';
+
+export interface State {
+    filter: SearchBTCExchangeRateHistoryAJAXRequest;
+    historicalData: SearchBTCExchangeRateHistoryAJAXResponse | null;
+    data: SearchBTCExchangeRateAJAXResponse | null;
+}
