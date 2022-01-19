@@ -31,7 +31,7 @@ class MainModule extends Module<Path, State, SearchBTCExchangeRateHistoryAJAXReq
         await this.fetchHistoryData();
     }
 
-    @Interval(5) // This will fire every 60 seconds
+    @Interval(60) // This will fire every 60 seconds
     override async onTick() {
         await this.fetchRealTimeData();
     }
