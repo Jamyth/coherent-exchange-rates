@@ -4,7 +4,7 @@ import { BTCExchangeRateAJAXService } from 'util/service/BTCExchangeRateAJAXServ
 import { DateUtil, ObjectUtil } from '@iamyth/util';
 import { CurrencyTypeView } from 'type/api';
 import type { Location } from 'react-shiba';
-import type { Path, State } from './type';
+import type { Path, State, Tab } from './type';
 import type { SearchBTCExchangeRateHistoryAJAXRequest } from 'type/api';
 
 const getInitialFilter = (): SearchBTCExchangeRateHistoryAJAXRequest => ({
@@ -16,6 +16,7 @@ const getInitialFilter = (): SearchBTCExchangeRateHistoryAJAXRequest => ({
 });
 
 const initialState: State = {
+    tab: 'real-time',
     filter: getInitialFilter(),
     historicalData: [],
     data: null,
@@ -30,7 +31,7 @@ class MainModule extends Module<Path, State, SearchBTCExchangeRateHistoryAJAXReq
         await this.fetchHistoryData();
     }
 
-    @Interval(60) // This will fire every 60 seconds
+    @Interval(5) // This will fire every 60 seconds
     override async onTick() {
         await this.fetchRealTimeData();
     }
@@ -46,10 +47,14 @@ class MainModule extends Module<Path, State, SearchBTCExchangeRateHistoryAJAXReq
         });
     }
 
+    changeTab(tab: Tab) {
+        this.setState({ tab });
+    }
+
+    @Loading('real-time')
     private async fetchRealTimeData() {
         const data = await BTCExchangeRateAJAXService.search();
         this.setState({ data });
-        console.info(this.state.data);
     }
 
     @Loading('chart')

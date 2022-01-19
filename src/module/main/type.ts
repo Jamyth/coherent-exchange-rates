@@ -7,7 +7,10 @@ import type {
 export type Path = '/';
 
 export interface State {
+    tab: Tab;
     filter: SearchBTCExchangeRateHistoryAJAXRequest;
     historicalData: SearchBTCExchangeRateHistoryAJAXResponse | null;
     data: SearchBTCExchangeRateAJAXResponse | null;
 }
+
+export type Tab = 'real-time' | 'historical';

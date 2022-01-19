@@ -1,10 +1,22 @@
 import React from 'react';
 import { ReactUtil } from '@iamyth/util';
+import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { Layout } from 'component/Layout';
+import { Overview } from './overview';
+
+const theme = createTheme({
+    palette: {
+        mode: 'dark',
+    },
+});
 
 export const Main = ReactUtil.memo('Main', () => {
     return (
-        <div>
-            <h1>Hello Main</h1>
-        </div>
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Layout>
+                <Overview />
+            </Layout>
+        </ThemeProvider>
     );
 });

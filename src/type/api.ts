@@ -36,7 +36,7 @@ export interface BTCCurrencyAJAXView {
     symbol: string;
 }
 
-export type SearchBTCExchangeRateAJAXResponse = Record<CurrencyTypeView, BTCCurrencyAJAXView>[];
+export type SearchBTCExchangeRateAJAXResponse = Record<CurrencyTypeView, BTCCurrencyAJAXView>;
 
 export interface SearchBTCExchangeRateHistoryAJAXRequest {
     base: 'BTC';
