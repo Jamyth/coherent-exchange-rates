@@ -23,12 +23,4 @@ export default defineConfig({
             projects: [path.join(__dirname, '../config/tsconfig.src.json')],
         }),
     ],
-    resolve: {
-        alias: [
-            {
-                find: 'css/',
-                replacement: path.join(__dirname, '../src/css/'),
-            },
-        ],
-    },
 });

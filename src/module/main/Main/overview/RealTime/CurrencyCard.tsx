@@ -38,7 +38,7 @@ export const CurrencyCard = ReactUtil.memo('CurrencyCard', ({ currency, data, pr
     }, [prevVariant, priceVariant]);
 
     return (
-        <Grid key={currency} item xs={6} md={4}>
+        <Grid key={currency} item xs={12} md={4}>
             <Card
                 variant="outlined"
                 sx={{

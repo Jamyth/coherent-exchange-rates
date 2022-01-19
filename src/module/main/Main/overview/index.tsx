@@ -5,6 +5,7 @@ import { TypedTabs } from 'component/TypedTabs';
 import { useMainState } from '../../hooks';
 import { actions } from 'module/main';
 import { RealTime } from './RealTime';
+import { HistoricalData } from './HistoricalData';
 import type { TypedTabMap } from 'component/TypedTabs';
 import type { Tab } from 'module/main/type';
 
@@ -18,7 +19,7 @@ export const Overview = ReactUtil.memo('Overview', () => {
         },
         historical: {
             title: 'Historical Data',
-            content: <h1>Historical Data</h1>,
+            content: <HistoricalData />,
         },
     };
 
