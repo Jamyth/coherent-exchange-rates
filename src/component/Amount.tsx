@@ -12,11 +12,14 @@ export interface Props {
 
 export const Amount = ReactUtil.memo('Amount', ({ color, value, precision = 2 }: Props) => {
     const endingZero = (value: string, padding: number) => value.padEnd(padding, '0');
-    const parts = NumberUtil.formatWithComma(value).split('.');
 
     if (!value) {
         return <span>-</span>;
     }
+
+    const roundedValue = NumberUtil.roundingToString(value, 'round', precision);
+    const parts = roundedValue.split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
     return (
         <Typography sx={{ color }}>

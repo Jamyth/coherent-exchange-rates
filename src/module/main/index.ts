@@ -1,30 +1,31 @@
 import { Module, register, Interval, Loading } from 'react-shiba';
 import { Main } from './Main';
-import { BTCExchangeRateAJAXService } from 'util/service/BTCExchangeRateAJAXService';
+import { ExchangeRateHostAJAXService } from 'util/service/ExchangeRateHostAJAXService';
 import { DateUtil, ObjectUtil } from '@iamyth/util';
-import { CurrencyTypeView } from 'type/api';
+import { CurrencyTypeViewV2 } from 'type/api';
 import type { Location } from 'react-shiba';
 import type { Path, State, Tab } from './type';
-import type { SearchBTCExchangeRateHistoryAJAXRequest } from 'type/api';
+import type { SearchExchangeRageHostTimeSeriesAJAXRequest } from 'type/api';
 
-const getInitialFilter = (): SearchBTCExchangeRateHistoryAJAXRequest => ({
-    base: 'BTC',
-    quote: CurrencyTypeView.HKD,
-    start: DateUtil.daysBeforeToday(1, 'day-start').getTime() / 1000,
-    scale: 900,
-    cors: true,
+const getInitialFilter = (): SearchExchangeRageHostTimeSeriesAJAXRequest => ({
+    start_date: DateUtil.format(DateUtil.daysBeforeToday(1, 'day-start')),
+    end_date: DateUtil.format(DateUtil.today('day-end')),
 });
 
 const initialState: State = {
     tab: 'real-time',
     filter: getInitialFilter(),
-    historicalData: [],
+    chartCurrencyFilter: [CurrencyTypeViewV2.USD, CurrencyTypeViewV2.HKD],
+    historicalData: null,
     data: null,
     prevData: null,
 };
 
-class MainModule extends Module<Path, State, SearchBTCExchangeRateHistoryAJAXRequest> {
-    override async onLocationMatched(routeParams: object, location: Location<SearchBTCExchangeRateHistoryAJAXRequest>) {
+class MainModule extends Module<Path, State, SearchExchangeRageHostTimeSeriesAJAXRequest> {
+    override async onLocationMatched(
+        routeParams: object,
+        location: Location<SearchExchangeRageHostTimeSeriesAJAXRequest>,
+    ) {
         const filter = location.state || getInitialFilter();
 
         this.updateFilter(filter);
@@ -37,11 +38,11 @@ class MainModule extends Module<Path, State, SearchBTCExchangeRateHistoryAJAXReq
         await this.fetchRealTimeData();
     }
 
-    updateFilter(filter: Partial<SearchBTCExchangeRateHistoryAJAXRequest>) {
+    updateFilter(filter: Partial<SearchExchangeRageHostTimeSeriesAJAXRequest>) {
         this.setState((state) => ObjectUtil.safeAssign(state.filter, filter));
     }
 
-    pushFilterToHistory(filter: Partial<SearchBTCExchangeRateHistoryAJAXRequest> = {}) {
+    pushFilterToHistory(filter: Partial<SearchExchangeRageHostTimeSeriesAJAXRequest> = {}) {
         this.pushHistory({
             ...this.state.filter,
             ...filter,
@@ -52,9 +53,14 @@ class MainModule extends Module<Path, State, SearchBTCExchangeRateHistoryAJAXReq
         this.setState({ tab });
     }
 
+    updateChartCurrency(currencies: CurrencyTypeViewV2[]) {
+        this.setState({ chartCurrencyFilter: currencies });
+    }
+
     @Loading('real-time')
     private async fetchRealTimeData() {
-        const data = await BTCExchangeRateAJAXService.search();
+        const data = await ExchangeRateHostAJAXService.latest();
+
         this.setState((state) => {
             state.prevData = state.data;
             state.data = data;
@@ -63,7 +69,7 @@ class MainModule extends Module<Path, State, SearchBTCExchangeRateHistoryAJAXReq
 
     @Loading('chart')
     private async fetchHistoryData() {
-        const data = await BTCExchangeRateAJAXService.history(this.state.filter);
+        const data = await ExchangeRateHostAJAXService.timeSeries(this.state.filter);
         this.setState((state) => (state.historicalData = data));
     }
 }

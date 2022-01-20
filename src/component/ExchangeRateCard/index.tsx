@@ -5,17 +5,17 @@ import { PriceUtil } from 'util/PriceUtil';
 import { DataRow } from './DataRow';
 import { Amount } from 'component/Amount';
 import { PriceChangeLabel } from './PriceChangeLabel';
-import type { BTCCurrencyAJAXView, CurrencyTypeView } from 'type/api';
+import type { CurrencyTypeViewV2 } from 'type/api';
 
 interface Props {
-    currency: CurrencyTypeView;
-    data: BTCCurrencyAJAXView;
-    prevData: BTCCurrencyAJAXView | undefined;
+    currency: CurrencyTypeViewV2;
+    price: number;
+    prevPrice?: number | null;
 }
 
-export const CurrencyCard = ReactUtil.memo('CurrencyCard', ({ currency, data, prevData }: Props) => {
+export const ExchangeRateCard = ReactUtil.memo('ExchangeRateCard', ({ currency, price, prevPrice }: Props) => {
     const [animationStart, setAnimationStart] = React.useState(false);
-    const priceVariant = React.useMemo(() => PriceUtil.compare(data.last, prevData?.last), [data, prevData]);
+    const priceVariant = React.useMemo(() => PriceUtil.compare(price, prevPrice ?? undefined), [price, prevPrice]);
     const prevVariant = usePrevious(priceVariant);
 
     const getColor = React.useCallback(
@@ -61,14 +61,13 @@ export const CurrencyCard = ReactUtil.memo('CurrencyCard', ({ currency, data, pr
                         <PriceChangeLabel variant={priceVariant} color={getColor()} />
                     </DataRow>
                     <DataRow label="Exchange Rate:">
-                        <Amount color={getColor()} value={data.last} />
+                        <Amount color={getColor()} value={price} />
                     </DataRow>
-                    <DataRow label="Buy:">
-                        <Amount color={getColor()} value={data.buy} />
-                    </DataRow>
-                    <DataRow label="Sell:">
-                        <Amount color={getColor()} value={data.sell} />
-                    </DataRow>
+                    {prevPrice !== undefined && (
+                        <DataRow label="Last Exchange Rate:">
+                            <Amount value={prevPrice} />
+                        </DataRow>
+                    )}
                 </CardContent>
             </Card>
         </Grid>
