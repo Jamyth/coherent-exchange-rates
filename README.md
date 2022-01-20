@@ -1,5 +1,7 @@
 # Crypto Exchange Rate
 
+[Demo Site](exchange-rate.jamyth.com)
+
 ## Tech Stack
 
 -   Framework (self-maintained): [react-shiba](https://github.com/Jamyth/react-shiba)
