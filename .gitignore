@@ -1,3 +1,4 @@
 /node_modules/
 /build/
 crypto-exchange-rate.zip
+*.DS_Store
