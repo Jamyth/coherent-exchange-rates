@@ -15,21 +15,24 @@ interface Props {
 
 export const CurrencyCard = ReactUtil.memo('CurrencyCard', ({ currency, data, prevData }: Props) => {
     const [animationStart, setAnimationStart] = React.useState(false);
-    const priceVariant = PriceUtil.compare(data.last, prevData?.last);
+    const priceVariant = React.useMemo(() => PriceUtil.compare(data.last, prevData?.last), [data, prevData]);
     const prevVariant = usePrevious(priceVariant);
 
-    const getColor = (opacity: number = 1): string | undefined => {
-        switch (priceVariant) {
-            case 'growth':
-                return `rgba(30, 160, 117, ${opacity})`;
-            case 'loss':
-                return `rgba(255, 82, 67, ${opacity})`;
-            case 'unchanged':
-                return `rgba(251, 192, 45, ${opacity})`;
-            case null:
-                return undefined;
-        }
-    };
+    const getColor = React.useCallback(
+        (opacity: number = 1): string | undefined => {
+            switch (priceVariant) {
+                case 'growth':
+                    return `rgba(30, 160, 117, ${opacity})`;
+                case 'loss':
+                    return `rgba(255, 82, 67, ${opacity})`;
+                case 'unchanged':
+                    return `rgba(251, 192, 45, ${opacity})`;
+                case null:
+                    return undefined;
+            }
+        },
+        [priceVariant],
+    );
 
     React.useEffect(() => {
         if (priceVariant !== prevVariant) {

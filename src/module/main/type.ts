@@ -11,6 +11,7 @@ export interface State {
     filter: SearchBTCExchangeRateHistoryAJAXRequest;
     historicalData: SearchBTCExchangeRateHistoryAJAXResponse | null;
     data: SearchBTCExchangeRateAJAXResponse | null;
+    prevData: SearchBTCExchangeRateAJAXResponse | null;
 }
 
 export type Tab = 'real-time' | 'historical';

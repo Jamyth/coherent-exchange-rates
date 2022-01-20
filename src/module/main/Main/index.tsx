@@ -2,7 +2,9 @@ import React from 'react';
 import { ReactUtil } from '@iamyth/util';
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { Layout } from 'component/Layout';
-import { Overview } from './overview';
+import { async } from 'react-shiba';
+
+const Overview = async(() => import('./overview'), 'Overview');
 
 const theme = createTheme({
     palette: {

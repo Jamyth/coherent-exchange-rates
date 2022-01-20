@@ -17,17 +17,26 @@ function formatWithSuffix(value: number | null): string {
     if (value === null) {
         return '-';
     }
-    const parts = value.toString().split('.');
+    const _value = Math.floor(value);
+    if (_value < 1000) {
+        return _value.toString();
+    }
     const suffixes = ['', 'K', 'M', 'B', 'T'];
-    const suffixNum = Math.floor(String(parts[0]).length / 3);
-    const shortValue = parseFloat((suffixNum !== 0 ? value / 1000 ** suffixNum : value).toPrecision(2));
-    if (shortValue < 1 && suffixNum > 0) {
-        return shortValue * 1000 + suffixes[suffixNum - 1];
+    const stringifiedValue = _value.toString();
+    const suffixIndex = Math.floor(stringifiedValue.length / 3);
+    const shortenedValue = _value / 1000 ** suffixIndex;
+
+    if (shortenedValue > 1) {
+        const scaled = Math.floor(shortenedValue * 10) / 10;
+        return scaled + suffixes[suffixIndex];
+    } else {
+        /**
+         * 123456789 will result in 0.1B, but this is not good while displaying data
+         * change it to 123.4M is better
+         */
+        const scaled = Math.floor(shortenedValue * 1000 * 10) / 10;
+        return scaled + suffixes[suffixIndex - 1];
     }
-    if (shortValue % 1 !== 0) {
-        return shortValue.toFixed(1) + suffixes[suffixNum];
-    }
-    return shortValue + suffixes[suffixNum];
 }
 
 export const PriceUtil = Object.freeze({

@@ -20,6 +20,7 @@ const initialState: State = {
     filter: getInitialFilter(),
     historicalData: [],
     data: null,
+    prevData: null,
 };
 
 class MainModule extends Module<Path, State, SearchBTCExchangeRateHistoryAJAXRequest> {
@@ -54,7 +55,10 @@ class MainModule extends Module<Path, State, SearchBTCExchangeRateHistoryAJAXReq
     @Loading('real-time')
     private async fetchRealTimeData() {
         const data = await BTCExchangeRateAJAXService.search();
-        this.setState({ data });
+        this.setState((state) => {
+            state.prevData = state.data;
+            state.data = data;
+        });
     }
 
     @Loading('chart')
