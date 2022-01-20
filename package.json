@@ -7,7 +7,8 @@
     "run-scripts": "ts-node --project config/tsconfig.script.json",
     "start": "pnpm run-scripts script/start.ts",
     "build": "pnpm run-scripts script/build.ts",
-    "test": "jest --config config/jest.config.js --coverage"
+    "test": "jest --config config/jest.config.js --coverage",
+    "deploy": "sh deploy.sh"
   },
   "keywords": [],
   "author": "",
