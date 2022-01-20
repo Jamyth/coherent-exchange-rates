@@ -15,6 +15,6 @@ export class ExchangeRateHostAJAXService {
     static timeSeries(
         request: SearchExchangeRageHostTimeSeriesAJAXRequest,
     ): Promise<SearchExchangeRageHostTimeSeriesAJAXResponse> {
-        return ajax('GET', '/timeseries', {}, request, this.config);
+        return ajax('GET', '/timeseries', {}, { ...request, base: 'BTC' }, this.config);
     }
 }
